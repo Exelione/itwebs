@@ -1,6 +1,14 @@
-import "@/styles/globals.css";
+import { ThemeProvider } from "@/app/providers/ThemeProvider";
+import { Navbar } from "@/widgets/Navbar";
 import type { AppProps } from "next/app";
+import "@/app/styles/index.scss";
+
 
 export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+    return (
+        <ThemeProvider>
+            <Navbar />
+            <Component {...pageProps} />
+        </ThemeProvider>
+    );
 }
