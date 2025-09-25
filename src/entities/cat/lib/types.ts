@@ -11,3 +11,15 @@ export interface CatState {
     loading: boolean;
     error: string | null;
 }
+
+export interface CatFormData {
+    name: string;
+    image: File | null;
+}
+
+export interface AddCatResponse {
+    id: string;
+    name: string;
+    imageUrl: string;
+    success: boolean;
+}

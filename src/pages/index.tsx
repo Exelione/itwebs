@@ -18,7 +18,7 @@ export default function HomePage({ initialReduxState }: HomeProps) {
 
     return (
         <div className={styles.container}>
-            <h1 className={styles.title}>Тут есть коты! 🐱 (SSR)</h1>
+            <h1 className={styles.title}>Коты на любой вкус! 🐱</h1>
             {initialReduxState ? "🔄 Загружено на сервере" : "💻 Загружено на клиенте"}: {cats.length} котов
             <CatList cats={cats} />
         </div>

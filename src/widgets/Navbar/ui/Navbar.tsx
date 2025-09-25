@@ -16,6 +16,7 @@ export const Navbar = ({ className }: NavbarProps) => {
                 <AppLink href="/">Главная</AppLink>
                 <AppLink href="/about">О нас</AppLink>
                 <AppLink href="/favorites">Избранное</AppLink>
+                <AppLink href="/upload">Загрузить кота</AppLink>
             </div>
         </nav>
     );

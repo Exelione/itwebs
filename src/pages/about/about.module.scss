@@ -1,0 +1,35 @@
+.container {
+    height: calc(100vh - var(--navbar-height));
+    width: 100%;
+    margin: 0 auto;
+    padding: 40px 20px;
+    position: relative;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 30px;
+    font: var(--font-xl);
+    z-index: 3;
+}
+
+.content {
+    text-align: center;
+    font: var(--font-m);
+    z-index: 3;
+}
+
+.rendering {
+    margin: 50px 0;
+    font: var(--font-l);
+    color: var(--inverted-secondary-color);
+}
+
+
+.paws {
+    position: absolute;
+    right: 5%;
+    bottom: 0%;
+    font-size: 12rem;
+}
+

@@ -1,7 +1,17 @@
 .Button {
+    padding: 16px 25px;
+    display: block;
+    font: var(--font-m);
+    background: var(--inverted-bg-color);
+    color: var(--inverted-secondary-color);
+    border: none;
+    border-radius: 16px;
     cursor: pointer;
-    color: var(--primary-color);
-    padding: 6px 15px;
+    transition: transform 0.5s ease;
+
+    &:hover {
+        transform: scale(1.05);
+    }
 }
 
 .clear,

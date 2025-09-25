@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { CatState } from "./types";
+import { CatState } from "../lib/types";
 
 
 export const fetchCats = createAsyncThunk(
