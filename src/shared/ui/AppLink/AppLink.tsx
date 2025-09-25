@@ -1,13 +1,12 @@
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { FC, ReactNode } from "react";
 import { classNames } from "@/shared/lib/classNames/classNames";
 import cls from "./AppLink.module.scss";
-import { usePathname } from "next/navigation";
 
 export enum AppLinkTheme {
     PRIMARY = "primary",
     SECONDARY = "secondary",
-    RED = "red",
 }
 
 interface AppLinkProps {
@@ -29,7 +28,9 @@ export const AppLink: FC<AppLinkProps> = (props) => {
     } = props;
 
     const pathname = usePathname();
-    const isActive = pathname === href;
+    const isActive = href === "/"
+        ? pathname === "/"
+        : pathname?.startsWith(href);
 
     return (
         <Link

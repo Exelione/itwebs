@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { Theme, useTheme } from "@/app/providers/ThemeProvider";
-import MoonIcon from "@/shared/assets/icons/MoonIcon"
+import MoonIcon from "@/shared/assets/icons/MoonIcon";
 import SunIcon from "@/shared/assets/icons/SunIcon";
 import { classNames } from "@/shared/lib/classNames/classNames";
 import Button, { ButtonTheme } from "@/shared/ui/Button/Button";

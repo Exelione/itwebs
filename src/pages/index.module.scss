@@ -1,0 +1,33 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.title {
+  text-align: center;
+  color: var(--primary-color);
+  margin-bottom: 10px;
+  font: var(--font-xl);
+}
+
+.subtitle {
+  text-align: center;
+  color: var(--primary-color);
+  margin-bottom: 30px;
+  font: var(--font-l);
+}
+
+.loading {
+  text-align: center;
+  padding: 50px;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.error {
+  text-align: center;
+  padding: 50px;
+  font-size: 1.5rem;
+  color: red;
+}

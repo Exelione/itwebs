@@ -1,6 +1,6 @@
 .AppLink {
     text-decoration: none;
-    transition: color 1.2s ease, opacity 0.5s ease;
+    transition: color 1.2s ease;
 
      &.primary {
         color: var(--inverted-primary-color);
