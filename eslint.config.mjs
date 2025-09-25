@@ -22,7 +22,9 @@ const eslintConfig = [
     },
     {
         rules: {
-            "indent": ["error", 4, { SwitchCase: 1 }],
+            "indent": "off",
+            "semi": ["error", "always"],
+            "space-before-blocks": "error",
             "no-trailing-spaces": "error",
             "no-multi-spaces": ["error", { ignoreEOLComments: false }],
             "quotes": ["error", "double", { avoidEscape: true }],
@@ -37,7 +39,7 @@ const eslintConfig = [
                         "sibling",
                         "index",
                         "type",
-                        "unknown", // включаем неизвестные в конец
+                        "unknown",
                     ],
                     pathGroups: [
                         {
