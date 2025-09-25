@@ -52,3 +52,9 @@
   font-size: 1.2rem;
   color: #666;
 }
+
+@media screen and (max-width: 468px) {
+  .list {
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  }
+}

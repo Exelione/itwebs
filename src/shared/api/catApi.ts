@@ -1,12 +1,17 @@
 import { AddCatResponse, CatFormData } from "@/entities/cat/lib/types";
-
+import { fetchWithRetry } from "@/shared/lib/network/fetchWithTimeout";
 
 export const catApi = {
     async addCat(catData: CatFormData): Promise<AddCatResponse> {
-        const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
+        const cacheBuster = `cb=${Date.now()}`;
+        const response = await fetchWithRetry(`https://jsonplaceholder.typicode.com/posts?${cacheBuster}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ title: catData.name }),
+            cache: "no-store",
+            timeoutMs: 10000,
+            retries: 2,
+            retryDelayMs: 400,
         });
 
         if (!response.ok) {
