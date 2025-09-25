@@ -3,15 +3,10 @@ import { AddCatResponse, CatFormData } from "@/entities/cat/lib/types";
 
 export const catApi = {
     async addCat(catData: CatFormData): Promise<AddCatResponse> {
-        const formData = new FormData();
-        formData.append("name", catData.name);
-        if (catData.image) {
-            formData.append("image", catData.image);
-        }
-
         const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
             method: "POST",
-            body: formData,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ title: catData.name }),
         });
 
         if (!response.ok) {

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useRouter } from "next/router";
 import { FC, ReactNode } from "react";
 import { classNames } from "@/shared/lib/classNames/classNames";
 import cls from "./AppLink.module.scss";
@@ -27,10 +27,9 @@ export const AppLink: FC<AppLinkProps> = (props) => {
         ...otherProps
     } = props;
 
-    const pathname = usePathname();
-    const isActive = href === "/"
-        ? pathname === "/"
-        : pathname?.startsWith(href);
+    const router = useRouter();
+    const currentPath = router.asPath || "/";
+    const isActive = href === "/" ? currentPath === "/" : currentPath.startsWith(href);
 
     return (
         <Link

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { AddCatResponse } from "@/entities/cat/lib/types";
 import { useWebSocket } from "@/features/realtime-communication/lib/hooks/useWebsocket";
 import { messageFactory } from "@/features/realtime-communication/lib/utils/messageFactory";
+import { WebSocketStatus } from "@/features/realtime-communication/model/types";
 import { useUploadHistory } from "@/features/upload-manager/lib/hooks/useUploadHistory";
 import { catApi } from "@/shared/api/catApi";
 import Button from "@/shared/ui/Button/Button";
@@ -20,7 +21,7 @@ interface WebSocketStatusDisplay {
     className: string;
 }
 
-const getWebSocketStatusDisplay = (status: string): WebSocketStatusDisplay => {
+const getWebSocketStatusDisplay = (status: WebSocketStatus): WebSocketStatusDisplay => {
     const statusMap: Record<string, WebSocketStatusDisplay> = {
         connected: { text: "Подключен", emoji: "🟢", className: styles.connected },
         connecting: { text: "Подключение...", emoji: "🟡", className: styles.connecting },
