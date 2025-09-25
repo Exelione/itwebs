@@ -14,32 +14,6 @@
 
 - WebSocket: Отправка уведомления после успешного POST
   
-📁 Структура проекта
-
-src/
-  app/
-    providers/           # Провайдеры (Redux, Theme)
-    store/               # Redux store
-    styles/              # SCSS (reset, темы)
-  entities/
-    cat/                 # Модель, типы и UI котов
-  features/
-    realtime-communication/  # WebSocket (hook, service, types)
-    upload-manager/          # История загрузок (hook)
-  pages/
-    _app.tsx
-    index.tsx            # SSR
-    about/               # SSG
-    favorites/           # CSR
-    upload/              # ISR
-  shared/
-    api/                 # catApi (POST)
-    lib/                 # classNames, hooks
-    ui/                  # Button, AppLink
-  widgets/
-    Navbar/
-    ThemeSwitcher/
-    AddCatModal/
 
 🔌 API и WebSocket
 
