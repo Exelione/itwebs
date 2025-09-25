@@ -6,9 +6,18 @@ export const fetchCats = createAsyncThunk(
     "cats/fetchCats",
     async (limit: number) => {
         const cacheBuster = `cb=${Date.now()}`;
+        const apiKey = process.env.NEXT_PUBLIC_CAT_API_KEY;
         const response = await fetchWithRetry(
             `https://api.thecatapi.com/v1/images/search?limit=${limit}&${cacheBuster}`,
-            { cache: "no-store", timeoutMs: 10000, retries: 2, retryDelayMs: 400 }
+            {
+                cache: "no-store",
+                mode: "cors",
+                credentials: "omit",
+                headers: apiKey ? { "x-api-key": apiKey } : undefined,
+                timeoutMs: 10000,
+                retries: 2,
+                retryDelayMs: 400,
+            }
         );
         const data = await response.json();
         return data;
