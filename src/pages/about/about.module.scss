@@ -30,6 +30,10 @@
     position: absolute;
     right: 5%;
     bottom: 0%;
-    font-size: 12rem;
 }
 
+@media screen and (max-width: 468px) {
+    .paws {
+        height: 255px;   
+    }
+}

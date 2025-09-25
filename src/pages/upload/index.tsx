@@ -150,7 +150,11 @@ export default function UploadPage({ serverTime, buildId }: UploadPageProps) {
 }
 
 export async function getStaticProps() {
-    const serverTime = new Date().toLocaleString("ru-RU");
+    const serverTime = new Intl.DateTimeFormat("ru-RU", {
+        dateStyle: "short",
+        timeStyle: "medium",
+        timeZone: "Europe/Moscow",
+    }).format(new Date());
     const buildId = Math.random().toString(36).substr(2, 6).toUpperCase();
 
     return {
