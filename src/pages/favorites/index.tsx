@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Cat } from "@/entities/cat/model/types";
+import { Cat } from "@/entities/cat/lib/types";
 import { CatList } from "@/entities/cat/ui/CatList/CatList";
 import { useAppSelector } from "@/shared/lib/hooks/redux";
 import styles from "./favorites.module.scss";
@@ -19,12 +19,12 @@ export default function Favorites() {
 
     return (
         <div className={styles.container}>
-            <h1 className={styles.title}>Любимые котики ❤️</h1>
+            <h1 className={styles.title}>Любимые коты ❤️</h1>
             {favoriteCats.length === 0 ? (
-                <p className={styles.empty}>У вас пока нет любимых котиков</p>
+                <p className={styles.empty}>У вас пока нет любимых котов</p>
             ) : (
                 <>
-                    <p className={styles.subtitle}>Котики, которых вы лайкнули:</p>
+                    <p className={styles.subtitle}>Коты, которых вы лайкнули:</p>
                     <CatList cats={favoriteCats} />
                 </>
             )}

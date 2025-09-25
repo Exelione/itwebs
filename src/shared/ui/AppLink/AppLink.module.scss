@@ -2,19 +2,31 @@
     text-decoration: none;
     transition: color 1.2s ease;
 
-     &.primary {
+    &.primary {
         color: var(--inverted-primary-color);
     }
 
     &:hover {
         color: var(--inverted-secondary-color);
     }
-    
+
     &.secondary {
         color: var(--secondary-color);
     }
-    
+
     &.active {
-       color: var(--inverted-secondary-color);
+        color: var(--inverted-secondary-color);
+    }
+}
+
+@media screen and (max-width: 468px) {
+    .AppLink {
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .AppLink {
+        font-size: 10px;
     }
 }

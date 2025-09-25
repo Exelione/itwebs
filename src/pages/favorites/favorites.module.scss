@@ -1,3 +1,16 @@
 .container {
-    margin: auto;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+
+
+    .title {
+        text-align: center;
+        font: var(--font-xl);
+    }
+
+    .subtitle {
+        text-align: left;
+        font: var(--font-m);
+    }
 }

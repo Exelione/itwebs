@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { CatState } from "@/entities/cat/lib/types";
 import catReducer from "@/entities/cat/model/catSlice";
-import { CatState } from "@/entities/cat/model/types";
 
 type PreloadedState = {
   cats: CatState

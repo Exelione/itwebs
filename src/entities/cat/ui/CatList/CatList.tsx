@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useAppDispatch, useAppSelector } from "@/shared/lib/hooks/redux";
+import { Cat } from "../../lib/types";
 import { toggleFavorite } from "../../model/catSlice";
-import { Cat } from "../../model/types";
 import styles from "./CatList.module.scss";
 
 interface CatListProps {
