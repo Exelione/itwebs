@@ -1,12 +1,14 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { fetchWithRetry } from "@/shared/lib/network/fetchWithTimeout";
 import { CatState } from "../lib/types";
-
 
 export const fetchCats = createAsyncThunk(
     "cats/fetchCats",
     async (limit: number) => {
-        const response = await fetch(
-            `https://api.thecatapi.com/v1/images/search?limit=${limit}`
+        const cacheBuster = `cb=${Date.now()}`;
+        const response = await fetchWithRetry(
+            `https://api.thecatapi.com/v1/images/search?limit=${limit}&${cacheBuster}`,
+            { cache: "no-store", timeoutMs: 10000, retries: 2, retryDelayMs: 400 }
         );
         const data = await response.json();
         return data;
