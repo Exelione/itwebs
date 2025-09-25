@@ -2,7 +2,8 @@ import { makeStore } from "@/app/store";
 import { RootState } from "@/app/store";
 import { fetchCats } from "@/entities/cat/model/catSlice";
 import { CatList } from "@/entities/cat/ui/CatList/CatList";
-import { useAppSelector } from "@/shared/lib/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/shared/lib/hooks/redux";
+import Button, { ButtonSize } from "@/shared/ui/Button/Button";
 import styles from "./index.module.scss";
 
 interface HomeProps {
@@ -10,6 +11,11 @@ interface HomeProps {
 }
 
 export default function HomePage({ initialReduxState }: HomeProps) {
+    const dispatch = useAppDispatch();
+
+    const uploadCats = () => {
+        dispatch(fetchCats(10));
+    };
 
     const { items: cats, loading, error } = useAppSelector((state) => state.cats);
 
@@ -19,7 +25,9 @@ export default function HomePage({ initialReduxState }: HomeProps) {
     return (
         <div className={styles.container}>
             <h1 className={styles.title}>Коты на любой вкус! 🐱</h1>
-            {initialReduxState ? "🔄 Загружено на сервере" : "💻 Загружено на клиенте"}: {cats.length} котов
+            {initialReduxState && cats.length > 0 &&
+             <Button className={styles.uploadButton} size={ButtonSize.M} onClick={uploadCats}>Обновить котосписок</Button>
+            }
             <CatList cats={cats} />
         </div>
     );
@@ -27,7 +35,7 @@ export default function HomePage({ initialReduxState }: HomeProps) {
 
 export async function getServerSideProps() {
     const store = makeStore();
-    await store.dispatch(fetchCats(1));
+    await store.dispatch(fetchCats(10));
 
     return {
         props: {

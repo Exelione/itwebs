@@ -1,7 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { AddCatResponse } from "@/entities/cat/lib/types";
+import { useWebSocket } from "@/features/realtime-communication/lib/hooks/useWebsocket";
+import { messageFactory } from "@/features/realtime-communication/lib/utils/messageFactory";
+import { useUploadHistory } from "@/features/upload-manager/lib/hooks/useUploadHistory";
 import { catApi } from "@/shared/api/catApi";
-import Button, { ButtonSize } from "@/shared/ui/Button/Button";
+import Button from "@/shared/ui/Button/Button";
 import { AddCatModal } from "@/widgets/AddCatModal/ui/AddCatModal";
 import styles from "./upload.module.scss";
 
@@ -11,89 +14,78 @@ interface UploadPageProps {
     buildId: string;
 }
 
+interface WebSocketStatusDisplay {
+    text: string;
+    emoji: string;
+    className: string;
+}
+
+const getWebSocketStatusDisplay = (status: string): WebSocketStatusDisplay => {
+    const statusMap: Record<string, WebSocketStatusDisplay> = {
+        connected: { text: "Подключен", emoji: "🟢", className: styles.connected },
+        connecting: { text: "Подключение...", emoji: "🟡", className: styles.connecting },
+        disconnected: { text: "Отключен", emoji: "🔴", className: styles.disconnected },
+        error: { text: "Ошибка", emoji: "🔴", className: styles.error }
+    };
+
+    return statusMap[status] || statusMap.disconnected;
+};
+
 export default function UploadPage({ serverTime, buildId }: UploadPageProps) {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [uploadHistory, setUploadHistory] = useState<AddCatResponse[]>([]);
-    const [wsConnection, setWsConnection] = useState<"connected" | "disconnected">("disconnected");
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
 
-    useEffect(() => {
-        const savedHistory = localStorage.getItem("catUploadHistory");
-        if (savedHistory) {
-            setUploadHistory(JSON.parse(savedHistory));
-        }
-    }, []);
+    const { uploadHistory, addToHistory, clearHistory, totalUploads } = useUploadHistory();
+    const { status, sendMessage, lastMessage } = useWebSocket();
 
-    useEffect(() => {
-        localStorage.setItem("catUploadHistory", JSON.stringify(uploadHistory));
-    }, [uploadHistory]);
+    const statusDisplay = getWebSocketStatusDisplay(status);
 
-    useEffect(() => {
-        const connectWebSocket = () => {
-            try {
-                const ws = new WebSocket("wss://ws.postman-echo.com/raw");
-
-                ws.onopen = () => {
-                    console.log("WebSocket connected");
-                    setWsConnection("connected");
-                };
-
-                ws.onmessage = (event) => {
-                    console.log("WebSocket message:", event.data);
-                };
-
-                ws.onclose = () => {
-                    console.log("WebSocket disconnected");
-                    setWsConnection("disconnected");
-                };
-
-                return ws;
-            } catch (error) {
-                console.error("WebSocket error:", error);
-                return null;
-            }
-        };
-
-        const ws = connectWebSocket();
-        return () => ws?.close();
-    }, []);
-
-    const handleSubmit = async (formData: { name: string; image: File | null }) => {
+    const handleSubmit = async (formData: { name: string; image: File | null }): Promise<void> => {
         setLoading(true);
 
         try {
             console.log("📤 Отправка POST-запроса:", formData.name);
 
-            const response = await catApi.addCat(formData);
+            const response: AddCatResponse = await catApi.addCat(formData);
 
-            setUploadHistory(prev => [response, ...prev]);
+            addToHistory(response);
             setIsModalOpen(false);
+
+            const catMessage = messageFactory.createCatAddedMessage(
+            response.name,
+            response.id,
+            `User_${Math.random().toString(36)}`
+        );
+
+            sendMessage(catMessage);
+
 
             console.log("✅ POST-запрос успешен");
 
         } catch (error) {
             console.error("❌ Ошибка POST-запроса:", error);
+            const errorMessage = messageFactory.createErrorMessage(
+            error instanceof Error ? error.message : "Unknown error",
+            "UPLOAD_ERROR"
+        );
+
+        sendMessage(errorMessage);
             alert("Произошла ошибка при добавлении котика");
         } finally {
             setLoading(false);
         }
     };
 
-    const clearHistory = () => {
-        setUploadHistory([]);
-        localStorage.removeItem("catUploadHistory");
-    };
-
     return (
         <div className={styles.container}>
-            <h1 className={styles.title}>Добавить кота 🐱 (ISR)</h1>
+            <h1 className={styles.title}>Добавить кота 🐱</h1>
             <p className={styles.subtitle}>
                 Страница сгенерирована: {serverTime} | Build: {buildId}
             </p>
 
             <div className={styles.websocketStatus}>
-                WebSocket: <span className={wsConnection === "connected" ? styles.connected : styles.disconnected}>
-                    {wsConnection === "connected" ? "🟢 Подключен" : "🔴 Отключен"}
+                WebSocket: <span className={statusDisplay.className}>
+                    {statusDisplay.emoji} {statusDisplay.text}
                 </span>
             </div>
 
@@ -107,10 +99,9 @@ export default function UploadPage({ serverTime, buildId }: UploadPageProps) {
             {uploadHistory.length > 0 && (
                 <div className={styles.historySection}>
                     <div className={styles.historyHeader}>
-                        <h3>История загрузок ({uploadHistory.length})</h3>
+                        <h3>История загрузок ({totalUploads})</h3>
                         <Button
                             onClick={clearHistory}
-                            size={ButtonSize.XL}
                             className={styles.clearButton}
                         >
                             🗑️ Очистить
@@ -141,7 +132,10 @@ export default function UploadPage({ serverTime, buildId }: UploadPageProps) {
             <div className={styles.websocketDemo}>
                 <h3>Демонстрация WebSocket</h3>
                 <p>При добавлении кота отправляется уведомление через WebSocket</p>
-                <p>Статус: {wsConnection}</p>
+                <p>Статус: {statusDisplay.text}</p>
+                {lastMessage && (
+                    <p>Последнее сообщение: {lastMessage.type}</p>
+                )}
             </div>
 
             <AddCatModal
@@ -156,7 +150,7 @@ export default function UploadPage({ serverTime, buildId }: UploadPageProps) {
 
 export async function getStaticProps() {
     const serverTime = new Date().toLocaleString("ru-RU");
-    const buildId = Math.random().toString(36).toUpperCase();
+    const buildId = Math.random().toString(36).substr(2, 6).toUpperCase();
 
     return {
         props: { serverTime, buildId },
