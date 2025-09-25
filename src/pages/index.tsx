@@ -2,7 +2,7 @@ import { makeStore } from "@/app/store";
 import { RootState } from "@/app/store";
 import { fetchCats } from "@/entities/cat/model/catSlice";
 import { CatList } from "@/entities/cat/ui/CatList/CatList";
-import { useAppDispatch, useAppSelector } from "@/shared/lib/hooks/redux";
+import { useAppSelector } from "@/shared/lib/hooks/redux";
 import Button, { ButtonSize } from "@/shared/ui/Button/Button";
 import styles from "./index.module.scss";
 
@@ -11,10 +11,8 @@ interface HomeProps {
 }
 
 export default function HomePage({ initialReduxState }: HomeProps) {
-    const dispatch = useAppDispatch();
-
     const uploadCats = () => {
-        dispatch(fetchCats(10));
+        window.location.reload();
     };
 
     const { items: cats, loading, error } = useAppSelector((state) => state.cats);

@@ -2,7 +2,7 @@ import Image from "next/image";
 import { useAppDispatch, useAppSelector } from "@/shared/lib/hooks/redux";
 import Button, { ButtonSize } from "@/shared/ui/Button/Button";
 import { Cat } from "../../lib/types";
-import { fetchCats, toggleFavorite } from "../../model/catSlice";
+import { toggleFavorite } from "../../model/catSlice";
 import styles from "./CatList.module.scss";
 
 interface CatListProps {
@@ -16,8 +16,9 @@ export const CatList = ({ cats }: CatListProps) => {
     const handleLike = (catId: string) => {
         dispatch(toggleFavorite(catId));
     };
+
     const uploadCats = () => {
-        dispatch(fetchCats(10));
+        window.location.reload();
     };
 
     if (cats.length === 0) {
